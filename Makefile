@@ -153,7 +153,7 @@ help :
 	@/bin/echo -e "\tclean          : remove all build files"
 	@/bin/echo -e "\treally-clean   : remove build directory\n"
 	@/bin/echo -e "\nOptions:"
-	@/bin/echo -e "\tboard=mx95lp5/mx95lp4x/mx95lp4x-15  : the board,            default: mx95lp5"
+	@/bin/echo -e "\tboard=edm-imx95/mx95lp5/mx95lp4x/mx95lp4x-15  : the board,            default: mx95lp5"
 	@/bin/echo -e "\tboard=mx943lp5-19/mx943lp4-19       : the board,            "
 	@/bin/echo -e "\toei=ddr/tcm                         : OEI type,             default: ddr"
 	@/bin/echo -e "\tr=A0/B0                             : SOC revision,         default: A0"
