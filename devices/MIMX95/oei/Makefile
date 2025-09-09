@@ -26,6 +26,7 @@ INCLUDE += \
 	-I$(DRIVER_DIR)/edma  \
 	-I$(DRIVER_DIR)/lpuart  \
 	-I$(DRIVER_DIR)/sysctr  \
+    -I$(DRIVER_DIR)/rgpio  \
 	-I$(COMPONENTS_DIR)/crc
 
 VPATH += \
@@ -39,6 +40,7 @@ VPATH += \
     $(DRIVER_DIR)/edma  \
     $(DRIVER_DIR)/lpuart  \
     $(DRIVER_DIR)/sysctr  \
+    $(DRIVER_DIR)/rgpio  \
     $(COMPONENTS_DIR)/crc
 
 SDK_OBJS = \
@@ -47,6 +49,7 @@ SDK_OBJS = \
     $(OUT)/fsl_clock.o  \
     $(OUT)/fsl_fract_pll.o  \
     $(OUT)/fsl_power.o  \
+    $(OUT)/fsl_rgpio.o  \
     $(OUT)/fsl_src.o  \
     $(OUT)/fsl_sysctr.o
 
