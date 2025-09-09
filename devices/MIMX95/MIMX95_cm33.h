@@ -45,6 +45,7 @@
 #include "MIMX95_LPUART.h"
 #include "MIMX95_MU.h"
 #include "MIMX95_PLL.h"
+#include "MIMX95_RGPIO.h"
 #include "MIMX95_SRC_GEN.h"
 #include "MIMX95_SRC_MEM.h"
 #include "MIMX95_SRC_XSPR.h"
