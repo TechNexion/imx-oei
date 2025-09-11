@@ -36,6 +36,20 @@ typedef struct
     uint8_t inst;             /*!< Instance number */
 } board_uart_config_t;
 
+
+/*******************************************************************************
+ * BOARD_ID1   BOARD_ID0
+ *     1            1       16G LPDDR5
+ *     1            0       8G LPDDR5
+ *     0            1       4G LPDDR5
+ ******************************************************************************/
+enum {
+	LPDDR5_16GB = 0x3,
+	LPDDR5_8GB = 0x2,
+	LPDDR5_4GB = 0x1,
+	LPDDR5_UNKNOWN = 0xf,
+};
+
 #if defined(__cplusplus)
 extern "C" {
 #endif /* __cplusplus */
