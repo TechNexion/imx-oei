@@ -4,11 +4,13 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
+#include <stdio.h>
 #include "oei.h"
 #include "board.h"
 #include "fsl_lpuart.h"
 #include "fsl_ccm.h"
 #include "fsl_clock.h"
+#include "fsl_rgpio.h"
 
 /*******************************************************************************
  * Variables
@@ -76,5 +78,40 @@ void BOARD_InitDebugConsole(void)
         lpuart_config.enableRx = true;
         (void) LPUART_Init(s_uartConfig.base, &lpuart_config,
             (uint32_t) rate & 0xFFFFFFFFU);
+    }
+}
+
+void BOARD_DetectDDR(void)
+{
+    uint8_t DDRType = 0;
+    /* Initialize GPIOs for DRAM detection */
+    rgpio_pin_config_t gpioConfig =
+    {
+        kRGPIO_DigitalInput,
+        0U
+    };
+
+    RGPIO_PinInit(GPIO1, 8U, &gpioConfig);
+    RGPIO_PinInit(GPIO1, 9U, &gpioConfig);
+
+    uint8_t GPIO1_IO_BIT8_value = RGPIO_ReadPinInput(GPIO1, 8U);
+    uint8_t GPIO1_IO_BIT9_value = RGPIO_ReadPinInput(GPIO1, 9U);
+
+    DDRType = GPIO1_IO_BIT8_value | (GPIO1_IO_BIT9_value << 1);
+
+    switch (DDRType)
+    {
+        case LPDDR5_4GB:
+            printf("DDR Type: LPDDR5_4GB\n");
+            break;
+        case LPDDR5_8GB:
+            printf("DDR Type: LPDDR5_8GB\n");
+            break;
+        case LPDDR5_16GB:
+            printf("DDR Type: LPDDR5_16GB\n");
+            break;
+        default:
+            printf("DDR Type: LPDDR5_UNKNOWN\n");
+            break;
     }
 }
