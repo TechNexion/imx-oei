@@ -62,6 +62,11 @@ static uint32_t Ddr_Load_Training_Data(uint32_t offset)
     return (size == lsize ? ROM_API_OKAY : ROM_API_ERR_INV_PAR);
 }
 
+__WEAK void BOARD_DetectDDR(void)
+{
+    /* Empty weak implementation */
+}
+
 int oei_main(uint32_t argc, uint32_t *argv)
 {
     int ret = 0;
@@ -75,6 +80,7 @@ int oei_main(uint32_t argc, uint32_t *argv)
     BOARD_InitPins();
     BOARD_InitDebugConsole();
 #endif
+    BOARD_DetectDDR();
 
 #ifdef DDR_IEE
     prepare_iee();
