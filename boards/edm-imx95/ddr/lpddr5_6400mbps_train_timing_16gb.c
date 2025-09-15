@@ -1,9 +1,9 @@
 /*
- * Copyright 2023-2025 NXP
+ * Copyright 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  *
- * Code generated with DDR Tool v3.7.0_0.2-4600df02.
+ * Code generated with DDR Tool v3.7.0_0.4-e3f9e8da.
  * DDR PHY FW2024.09
  * Chip revision: B0
  */
@@ -10750,3 +10750,4 @@ struct dram_timing_info dram_timing = {
     .fsp_cfg = ddr_dram_fsp_cfg,
     .fsp_cfg_num = ARRAY_SIZE(ddr_dram_fsp_cfg),
 };
+

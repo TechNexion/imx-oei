@@ -1,4 +1,4 @@
-DDR_CONFIG ?= MIMX95_LPDDR5_EVK_19X19_6400MTS_FW2024.09_timing
+DDR_CONFIG ?= lpddr5_6400mbps_train_timing_16gb
 OBJS  += $(OUT)/$(DDR_CONFIG).o
 
 VPATH += boards/edm-imx95/ddr
