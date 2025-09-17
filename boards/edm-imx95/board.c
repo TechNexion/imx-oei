@@ -114,4 +114,7 @@ void BOARD_DetectDDR(void)
             printf("DDR Type: LPDDR5_UNKNOWN\n");
             break;
     }
+#ifdef DDR_CONFIG_STR
+    printf("Build-time DDR Config: %s\n", DDR_CONFIG_STR);
+#endif
 }
