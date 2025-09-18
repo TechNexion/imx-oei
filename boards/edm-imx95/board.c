@@ -83,7 +83,7 @@ void BOARD_InitDebugConsole(void)
 
 void BOARD_DetectDDR(void)
 {
-    uint8_t DDRType = 0;
+    uint8_t ddrcode = 0;
     /* Initialize GPIOs for DRAM detection */
     rgpio_pin_config_t gpioConfig =
     {
@@ -97,9 +97,9 @@ void BOARD_DetectDDR(void)
     uint8_t GPIO1_IO_BIT8_value = RGPIO_ReadPinInput(GPIO1, 8U);
     uint8_t GPIO1_IO_BIT9_value = RGPIO_ReadPinInput(GPIO1, 9U);
 
-    DDRType = GPIO1_IO_BIT8_value | (GPIO1_IO_BIT9_value << 1);
+    ddrcode = GPIO1_IO_BIT8_value | (GPIO1_IO_BIT9_value << 1);
 
-    switch (DDRType)
+    switch (ddrcode)
     {
         case LPDDR5_4GB:
             printf("DDR Type: LPDDR5_4GB\n");
@@ -112,9 +112,9 @@ void BOARD_DetectDDR(void)
             break;
         default:
             printf("DDR Type: LPDDR5_UNKNOWN\n");
-            break;
     }
 #ifdef DDR_CONFIG_STR
     printf("Build-time DDR Config: %s\n", DDR_CONFIG_STR);
 #endif
+    Write32(OCRAM_NON_SECURE_BASE_ADDR, ddrcode);
 }
