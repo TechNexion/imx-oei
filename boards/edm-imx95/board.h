@@ -50,6 +50,8 @@ enum {
 	LPDDR5_UNKNOWN = 0xf,
 };
 
+#define OCRAM_NON_SECURE_BASE_ADDR 0x0204C0000
+
 #if defined(__cplusplus)
 extern "C" {
 #endif /* __cplusplus */
