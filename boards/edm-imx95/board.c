@@ -1,10 +1,11 @@
 /*
- * Copyright 2023-2024 NXP
+ * Copyright 2023-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #include <stdio.h>
+#include "clock.h"
 #include "oei.h"
 #include "board.h"
 #include "fsl_lpuart.h"
@@ -12,6 +13,7 @@
 #include "fsl_clock.h"
 #include "fsl_rgpio.h"
 
+#if defined(DEBUG)
 /*******************************************************************************
  * Variables
  ******************************************************************************/
@@ -80,8 +82,9 @@ void BOARD_InitDebugConsole(void)
             (uint32_t) rate & 0xFFFFFFFFU);
     }
 }
+#endif /* DEBUG */
 
-void BOARD_DetectDDR(void)
+static void BOARD_DetectDDR(void)
 {
     uint8_t ddrcode = 0;
     /* Initialize GPIOs for DRAM detection */
@@ -117,4 +120,19 @@ void BOARD_DetectDDR(void)
     printf("Build-time DDR Config: %s\n", DDR_CONFIG_STR);
 #endif
     Write32(OCRAM_NON_SECURE_BASE_ADDR, ddrcode);
+}
+
+/*--------------------------------------------------------------------------*/
+/* Initialize board                                                         */
+/*--------------------------------------------------------------------------*/
+void BOARD_InitHardware(void)
+{
+    Clock_Init();
+
+    BOARD_DetectDDR();
+
+#if defined(DEBUG)
+    BOARD_InitPins();
+    BOARD_InitDebugConsole();
+#endif
 }
