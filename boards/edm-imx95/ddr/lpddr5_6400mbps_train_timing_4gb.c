@@ -3,10 +3,10 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  *
- * Code generated with DDR Tool v3.8.0_0.7-7343b64b3.
+ * Code generated with DDR Tool v3.9.0_0.9-.
  * DDR PHY FW2024.09-SP2
  * Chip revision: B0
- * Part number: NXP LPDDR5 EVK 19x19 board's default DDR part
+ * Part number: NXP LPDDR5 EVK 19x19 board's default DDR part 4gb
  */
 
 #include "ddr.h"
