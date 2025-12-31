@@ -129,10 +129,10 @@ void BOARD_InitHardware(void)
 {
     Clock_Init();
 
-    BOARD_DetectDDR();
-
 #if defined(DEBUG)
     BOARD_InitPins();
     BOARD_InitDebugConsole();
 #endif
+
+    BOARD_DetectDDR();
 }
