@@ -1,4 +1,9 @@
 #include timings
+
+ifeq ($(TN_DDR_SUPPORT_MULTI_DDR), 1)
+    FLAGS += -DSUPPORT_MULTI_DDR
+endif
+
 include $(ROOT_DIR)/boards/$(SOM)/ddr/Makefile
 
 ifeq ($(TEST),1)

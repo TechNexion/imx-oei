@@ -11,6 +11,10 @@
 #include "oei.h"
 #include "soc_edma.h"
 
+#ifdef SUPPORT_MULTI_DDR
+#include <ddr_train_timing.h>
+#endif
+
 extern char s_code_end[];
 
 /**
@@ -281,6 +285,12 @@ void Ddr_Cfg_Save(struct dram_timing_info *dtiming)
         }
     }
 
+#ifdef SUPPORT_MULTI_DDR
+    /* skip last pstate struct */
+    ddr->trained_csr = (struct ddrphy *)((unsigned int)ddr->pstate[ddr->pstate_num-1].cfg + (ddr->pstate[ddr->pstate_num-1].cfg_num * sizeof(struct ddrc)));
+
+    ddr->ddrphy_trained_csr_num = TN_To_Ddr_Phy_Reg(ddr->trained_csr);
+#else
     /* save number of trained phy config registers */
     ddr->ddrphy_trained_csr_num = dtiming->ddrphy_trained_csr_num;
     /* skip last pstate struct */
@@ -291,6 +301,7 @@ void Ddr_Cfg_Save(struct dram_timing_info *dtiming)
     {
         ddr->trained_csr[i].reg = dtiming->ddrphy_trained_csr[i].reg;
     }
+#endif
 
     /* save pstate frequencies */
     for (i = 0; i < ddr->pstate_num; i++)
