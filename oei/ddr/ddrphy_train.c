@@ -9,6 +9,10 @@
 #include "fsl_sysctr.h"
 #include "time.h"
 
+#ifdef SUPPORT_MULTI_DDR
+#include <ddr_train_timing.h>
+#endif
+
 static void Ddr_Phy_Delay40(unsigned int drate)
 {
 #ifndef CONFIG_EMUL
@@ -34,7 +38,11 @@ int Ddr_Cfg_Phy(struct dram_timing_info *dtiming)
 
     /* initialize PHY configuration */
     /* config phy common reg */
+#ifdef SUPPORT_MULTI_DDR
+    dtiming->ddrphy_cfg_num = TN_Ddr_Phy_Cfg_Set(ddr_ddrphy_cfg_configs, pool_ddr_ddrphy_cfg);
+#else
     Ddr_Phy_Cfg_Set(dtiming->ddrphy_cfg, dtiming->ddrphy_cfg_num);
+#endif
 
 #ifdef DEBUG
     ts = SYSCTR_GetUsec64();
@@ -53,7 +61,11 @@ int Ddr_Cfg_Phy(struct dram_timing_info *dtiming)
     {
         /* If NumPStates more than 2, StartPsloop "DMA reload" prepare no action required */
         /* config phy pstate reg */
+#ifdef SUPPORT_MULTI_DDR
+        fsp_msg->fsp_phy_cfg_num = TN_Ddr_Phy_Cfg_Set( ddr_phy_fsp0_cfg_configs, pool_ddr_phy_fsp0_cfg);
+#else
         Ddr_Phy_Cfg_Set(fsp_msg->fsp_phy_cfg, fsp_msg->fsp_phy_cfg_num);
+#endif
 
         /* If NumPStates more than 2, stopPsloop "DMA reload" prepare
          * action is included in end of fsp_phy_cfg  */
@@ -133,14 +145,22 @@ int Ddr_Cfg_Phy(struct dram_timing_info *dtiming)
 
         /* If NumPStates more than 2, resumePsloop "DMA reload" prepare resume, no action */
         /* config PIE pstate reg */
+#ifdef SUPPORT_MULTI_DDR
+        fsp_msg->fsp_phy_pie_cfg_num = TN_Ddr_Phy_Cfg_Set(ddr_phy_pie_fsp0_cfg_configs, pool_ddr_phy_pie_fsp0_cfg);
+#else
         Ddr_Phy_Cfg_Set(fsp_msg->fsp_phy_pie_cfg, fsp_msg->fsp_phy_pie_cfg_num);
+#endif
         /* If NumPStates more than 2, "DMA reload" prepare end, prepare Xlat Table for this PState */
         /* action is included in end of fsp_phy_pie_cfg */
         fsp_msg++;
     }
 
     /* Load PHY Init Engine Image */
+#ifdef SUPPORT_MULTI_DDR
+    dtiming->ddrphy_pie_num = TN_Ddr_Phy_Cfg_Set(ddr_phy_pie_configs, pool_ddr_phy_pie);
+#else
     Ddr_Phy_Cfg_Set(dtiming->ddrphy_pie, dtiming->ddrphy_pie_num);
+#endif
 
     Dwc_Ddrphy_Apb_Wr(0xd0000, 0x1); /* CSR bus: MCU/PIE/DMA++,TDR/APB-- */
 

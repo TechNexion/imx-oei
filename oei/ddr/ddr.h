@@ -106,6 +106,13 @@ struct dram_fsp_msg
     unsigned int fsp_phy_prog_csr_ps_cfg_num;
 };
 
+#ifdef SUPPORT_MULTI_DDR
+struct __attribute__((__packed__)) ddrphy_addrs
+{
+    unsigned int reg;
+};
+#endif
+
 struct dram_timing_info
 {
     /* ddrc config */
@@ -121,7 +128,11 @@ struct dram_timing_info
     struct dram_fsp_msg *fsp_msg;
     unsigned int fsp_msg_num;
     /* ddr phy trained CSR */
+#ifdef SUPPORT_MULTI_DDR
+    struct ddrphy_addrs *ddrphy_trained_csr;
+#else
     struct ddrphy_cfg_param *ddrphy_trained_csr;
+#endif
     unsigned int ddrphy_trained_csr_num;
     /* ddr phy common PIE */
     struct ddrphy_cfg_param *ddrphy_pie;

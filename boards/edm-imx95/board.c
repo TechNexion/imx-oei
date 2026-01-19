@@ -13,6 +13,14 @@
 #include "fsl_clock.h"
 #include "fsl_rgpio.h"
 
+#ifdef SUPPORT_MULTI_DDR
+extern char __data_start__ [];
+extern char __data_size__ [];
+extern char __data_load_start__ [];
+
+void ddr_conf_init(void);
+#endif
+
 #if defined(DEBUG)
 /*******************************************************************************
  * Variables
@@ -84,6 +92,28 @@ void BOARD_InitDebugConsole(void)
 }
 #endif /* DEBUG */
 
+#ifdef SUPPORT_MULTI_DDR
+static void _memcpy(void *dest, const void *src, size_t n)
+{
+    char *d = (char *)dest;
+    const char *s = (const char *)src;
+
+    for (size_t i = 0; i < n; i++)
+    {
+        d[i] = s[i];
+    }
+}
+
+
+static void _copy_data(void)
+{
+    if (&__data_start__[0] != &__data_load_start__[0])
+    {
+        _memcpy(__data_start__, __data_load_start__, (size_t) __data_size__);
+    }
+}
+#endif
+
 static void BOARD_DetectDDR(void)
 {
     uint8_t ddrcode = 0;
@@ -127,6 +157,11 @@ static void BOARD_DetectDDR(void)
 /*--------------------------------------------------------------------------*/
 void BOARD_InitHardware(void)
 {
+
+#ifdef SUPPORT_MULTI_DDR
+    _copy_data();
+#endif
+
     Clock_Init();
 
 #if defined(DEBUG)
@@ -135,4 +170,9 @@ void BOARD_InitHardware(void)
 #endif
 
     BOARD_DetectDDR();
+
+#ifdef SUPPORT_MULTI_DDR
+    ddr_conf_init();
+#endif
+
 }
