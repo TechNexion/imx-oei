@@ -92,13 +92,6 @@ ifdef t
 endif
 TEST ?= 0
 
-TN_DDR_SUPPORT_MULTI_DDR ?= 0
-ifeq ($(OEI), ddr)
-    ifeq ($(board),edm-imx95)
-        TN_DDR_SUPPORT_MULTI_DDR := 1
-    endif
-endif
-
 # Configure output
 BUILD = $(ROOT_DIR)/build
 OUT = $(BUILD)/$(SOM)/$(OEI)
@@ -141,7 +134,7 @@ $(OUT)/%.o : %.S
 
 $(OUT)/$(IMG) : $(OBJS)
 	@echo "Linking $@ ...."
-	$(AT)$(LD) -o $@ $(OBJS) $(LFLAGS) 
+	$(AT)$(LD) -o $@ $(OBJS) $(LFLAGS)
 
 $(OUT)/$(IMG).elf : $(OBJS)
 	@echo "Linking $@ ...."

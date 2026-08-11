@@ -11,8 +11,10 @@
 #include "oei.h"
 #include "soc_edma.h"
 
-#ifdef SUPPORT_MULTI_DDR
-#include <ddr_train_timing.h>
+#if (defined(SUPPORT_MULTI_DDR) && defined(LPDDR5))
+#include <lpddr5_train_timing.h>
+#elif (defined(SUPPORT_MULTI_DDR) && defined(LPDDR4X))
+#include <lpddr4x_train_timing.h>
 #endif
 
 extern char s_code_end[];

@@ -1,4 +1,4 @@
-#include "ddr_segmented_data.h"
+#include "lpddr5_segmented_data.h"
 
 /* === ddr_ddrc_cfg Pool === */
 const struct ddrc_cfg_param pool_ddr_ddrc_cfg[] = {
