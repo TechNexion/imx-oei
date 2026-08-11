@@ -17,7 +17,6 @@
 extern char __data_start__ [];
 extern char __data_size__ [];
 extern char __data_load_start__ [];
-
 void ddr_conf_init(void);
 #endif
 
@@ -104,7 +103,6 @@ static void _memcpy(void *dest, const void *src, size_t n)
     }
 }
 
-
 static void _copy_data(void)
 {
     if (&__data_start__[0] != &__data_load_start__[0])
@@ -123,6 +121,11 @@ static void BOARD_DetectDDR(void)
         kRGPIO_DigitalInput,
         0U
     };
+#ifdef LPDDR5
+    const char *ddr_type_id = "LPDDR5";
+#else
+    const char *ddr_type_id = "LPDDR4X";
+#endif
 
     RGPIO_PinInit(GPIO1, 8U, &gpioConfig);
     RGPIO_PinInit(GPIO1, 9U, &gpioConfig);
@@ -132,19 +135,24 @@ static void BOARD_DetectDDR(void)
 
     ddrcode = GPIO1_IO_BIT8_value | (GPIO1_IO_BIT9_value << 1);
 
-    switch (ddrcode)
-    {
-        case LPDDR5_4GB:
-            printf("DDR Type: LPDDR5_4GB\n");
-            break;
-        case LPDDR5_8GB:
-            printf("DDR Type: LPDDR5_8GB\n");
-            break;
-        case LPDDR5_16GB:
-            printf("DDR Type: LPDDR5_16GB\n");
-            break;
+    // ddrcode = LPDDR4_4GB;
+    if (ddrcode == 0) {
+        printf("DDR Type: %s_UNKNOWN\n", ddr_type_id);
+    } else {
+#ifdef LPDDR4X
+        ddrcode += 3;
+#endif
+
+    switch (ddrcode) {
+        case LPDDR5_4GB:  printf("DDR Type: LPDDR5_4GB\n");   break;
+        case LPDDR5_8GB:  printf("DDR Type: LPDDR5_8GB\n");   break;
+        case LPDDR5_16GB: printf("DDR Type: LPDDR5_16GB\n");  break;
+        case LPDDR4X_2GB: printf("DDR Type: LPDDR4X_2GB\n");  break;
+        case LPDDR4X_4GB: printf("DDR Type: LPDDR4X_4GB\n");  break;
+        case LPDDR4X_8GB: printf("DDR Type: LPDDR4X_8GB\n");  break;
         default:
-            printf("DDR Type: LPDDR5_UNKNOWN\n");
+            printf("DDR Type: UNKNOWN %s TYPE\n", ddr_type_id);
+        }
     }
 #ifdef DDR_CONFIG_STR
     printf("Build-time DDR Config: %s\n", DDR_CONFIG_STR);

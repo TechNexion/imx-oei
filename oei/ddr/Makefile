@@ -1,8 +1,17 @@
 #include timings
 
-ifeq ($(TN_DDR_SUPPORT_MULTI_DDR), 1)
+
+MULTI_DDR_CONFIGS := lpddr4x_multi lpddr5_multi
+ifneq ($(filter $(MULTI_DDR_CONFIGS),$(DDR_CONFIG)),)
     FLAGS += -DSUPPORT_MULTI_DDR
 endif
+
+ifneq ($(findstring lpddr4x,$(DDR_CONFIG)),)
+    FLAGS += -DLPDDR4X
+else ifneq ($(findstring lpddr5,$(DDR_CONFIG)),)
+    FLAGS += -DLPDDR5
+endif
+
 
 include $(ROOT_DIR)/boards/$(SOM)/ddr/Makefile
 

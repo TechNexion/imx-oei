@@ -79,7 +79,7 @@ FLAGS += ${WARNS}
 # DEPENDENCY GENERATION
 # -MMD = generate dependency files for non-system headers
 #
-# OPTIMIZATION 
+# OPTIMIZATION
 # -O3 = optimzation level
 # -ffunction-sections = place each function in its own section (allows removal during link phase using --gc-sections)
 # -fdata-sections = place each data item in its own section (allows removal during link phase using --gc-sections)
@@ -110,9 +110,11 @@ CFLAGS = $(ARCHFLAGS) $(FLAGS) -MMD -O3 -ffunction-sections -fdata-sections -g -
 # -Wl,--gc-sections = linker garbage collection (allows function/data section removal during link phase)
 # -Wl,-Map = specifies map output file
 # -T = specifies linker script
-# 
+#
 #################################
-ifeq ($(TN_DDR_SUPPORT_MULTI_DDR), 1)
+ifeq ($(DDR_CONFIG), lpddr4x_multi)
+LFLAGS 	+= $(ARCHFLAGS) -Wl,--gc-sections -Wl,-Map=$(OUT)/$(IMG).map -nostdlib -lgcc $(LIB) -nodefaultlibs -Wl,--no-warn-rwx-segments -T$(SOC_DEVICE_DIR)/gcc/$(LCF)_multi_ddr.ld
+else ifeq ($(DDR_CONFIG), lpddr5_multi)
 LFLAGS 	+= $(ARCHFLAGS) -Wl,--gc-sections -Wl,-Map=$(OUT)/$(IMG).map -nostdlib -lgcc $(LIB) -nodefaultlibs -Wl,--no-warn-rwx-segments -T$(SOC_DEVICE_DIR)/gcc/$(LCF)_multi_ddr.ld
 else
 LFLAGS 	+= $(ARCHFLAGS) -Wl,--gc-sections -Wl,-Map=$(OUT)/$(IMG).map -nostdlib -lgcc $(LIB) -nodefaultlibs -Wl,--no-warn-rwx-segments -T$(SOC_DEVICE_DIR)/gcc/$(LCF).ld

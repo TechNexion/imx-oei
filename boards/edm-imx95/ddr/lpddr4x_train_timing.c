@@ -1,14 +1,14 @@
 #include <stdio.h>
 #include <oei.h>
 #include <board.h>
-#include "ddr_segmented_data.h"
-#include "ddr_train_timing.h"
+#include "lpddr4x_segmented_data.h"
+#include "lpddr4x_train_timing.h"
 
 static struct ddrphy_cfg_param ddr_phy_msgh_fsp0_cfg[MAX_DDR_PHY_MSGH_FSP0_CFG_LEN] = { 0 };
 static struct dram_fsp_msg ddr_dram_fsp_msg[1] = {
     {
-        /* P0 6400mts */
-        .drate = 6400,
+        /* P0 4266mts */
+        .drate = 4266,
         .ssc = false,
         .fw_type = FW_1D_IMAGE,
         .fsp_phy_msgh_cfg = ddr_phy_msgh_fsp0_cfg,
@@ -34,7 +34,7 @@ struct dram_timing_info dram_timing = {
     .ddrc_cfg_num = 0,
     .fsp_msg = ddr_dram_fsp_msg,
     .fsp_msg_num = ARRAY_SIZE(ddr_dram_fsp_msg),
-    .fsp_table = { 6400, },
+    .fsp_table = { 4266, },
     .fsp_cfg = ddr_dram_fsp_cfg,
     .fsp_cfg_num = ARRAY_SIZE(ddr_dram_fsp_cfg),
 };
@@ -86,15 +86,17 @@ static unsigned int _init_phy_cfg_param(int ddr_idx, const struct config_info_t 
 static int _get_ddr_idx(void) {
     int ddrcode = Read32(OCRAM_NON_SECURE_BASE_ADDR);
     switch (ddrcode) {
-        case LPDDR5_4GB:  return 0; break;
-        case LPDDR5_8GB:  return 1; break;
-        case LPDDR5_16GB: return 2; break;
+        case LPDDR4X_2GB:  return 0; break;
+        case LPDDR4X_4GB:  return 1; break;
+        case LPDDR4X_8GB: return 2; break;
         default:          return 0; break;
     }
 }
 
 void ddr_conf_init(void) {
     const int ddr_idx = _get_ddr_idx();
+
+    printf("ddr idx:%d\n", ddr_idx);
 
     dram_timing.ddrc_cfg_num =                 _init_cfg_param     ( ddr_idx, ddr_ddrc_cfg_configs,           pool_ddr_ddrc_cfg, ddr_ddrc_cfg                     );
     ddr_dram_fsp_msg[0].fsp_phy_msgh_cfg_num = _init_phy_cfg_param ( ddr_idx, ddr_phy_msgh_fsp0_cfg_configs,  pool_ddr_phy_msgh_fsp0_cfg, ddr_phy_msgh_fsp0_cfg   );
